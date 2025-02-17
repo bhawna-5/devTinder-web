@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@plugin "daisyui";
+ 
+  body {
+    background-color: rgba(0, 0, 0, 0.989); /* This is the default value */ 
+  }
