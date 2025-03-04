@@ -1,42 +1,40 @@
-import React, { useEffect } from "react";
 import axios from "axios";
-import { addFeed } from "./utils/feedSlice";
 import { BASE_URL } from "./utils/Constants";
-import UserCard from "./UserCard";
 import { useDispatch, useSelector } from "react-redux";
+import { addFeed } from "./utils/feedSlice";
+import { useEffect } from "react";
+import UserCard from "./UserCard";
 
 const Feed = () => {
+  const feed = useSelector((store) => store.feed);
   const dispatch = useDispatch();
-  const feed = useSelector((state) => state.feed);
 
   const getFeed = async () => {
+    if (feed) return;
     try {
-      if (feed) return; // Prevent refetching if feed exists
-      const response = await axios.get(BASE_URL + "/feed", {
+      const res = await axios.get(BASE_URL + "/feed", {
         withCredentials: true,
       });
-      console.log(response);
-      
-      dispatch(addFeed(response?.data));
-    } catch (error) {
-      console.log("Fetch Error:", error);
+      dispatch(addFeed(res?.data));
+    } catch (err) {
+      //TODO: handle error
     }
   };
 
   useEffect(() => {
     getFeed();
   }, []);
+  if (!feed) return;
 
-  // Add conditional rendering
-  if (!feed) return <div className="text-center mt-10">Loading Feed...</div>;
+  if (feed.length <= 0)
+    return <h1 className="flex justify-center my-10">No new users founds!</h1>;
 
   return (
-    <div className="flex justify-center my-10 flex-wrap gap-4">
-      {/* {feed.map((user) => ( */}
-        <UserCard user={feed[8]} />
-      {/* ))} */}
-    </div>
+    feed && (
+      <div className="flex justify-center my-10">
+        <UserCard user={feed[0]} />
+      </div>
+    )
   );
 };
-
 export default Feed;

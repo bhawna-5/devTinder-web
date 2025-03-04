@@ -6,11 +6,11 @@ import axios from "axios";
 import { BASE_URL } from "./utils/Constants";
 const NavBar = () => {
   const user = useSelector((state) => state.user);
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleLogout = async () => {
     try {
-      await axios.post(BASE_URL + "/logout",{}, { withCredentials: true });
+      await axios.post(BASE_URL + "/logout", {}, { withCredentials: true });
       dispatch(removeUser());
       return navigate("/login");
     } catch (error) {
@@ -50,7 +50,10 @@ const NavBar = () => {
                 </Link>
               </li>
               <li>
-                <a>Settings</a>
+                <Link to="/connections">Connections</Link>
+              </li>
+              <li>
+                <Link to="/requests">Requests</Link>
               </li>
               <li>
                 <a onClick={handleLogout}>Logout</a>
